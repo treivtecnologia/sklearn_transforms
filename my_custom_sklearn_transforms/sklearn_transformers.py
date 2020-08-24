@@ -13,4 +13,11 @@ class DropColumns(BaseEstimator, TransformerMixin):
         # Primeiro realizamos a cópia do dataframe 'X' de entrada
         data = X.copy()
         # Retornamos um novo dataframe sem as colunas indesejadas
-        return data.drop(labels=self.columns, axis='columns')
+        data = data.drop(labels=self.columns, axis='columns')
+        data = data.dropna(axis=0, subset=["NOTA_GO"])
+        df = data[['NOTA_DE' , 'NOTA_EM' , 'NOTA_MF' , 'NOTA_GO']]
+        data['MEDIA'] = df.mean(axis=1)
+        data['SOMA'] = df.sum(axis=1)
+        df = data[['NOTA_DE' , 'NOTA_EM', 'NOTA_GO']]
+        data['MEDIA_HUMANAS'] = df.mean(axis=1)
+        return data
